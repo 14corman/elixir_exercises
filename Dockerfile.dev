@@ -1,0 +1,25 @@
+FROM elixir:1.11.4-alpine
+
+RUN apk update && \
+    apk --no-cache --update add \
+      make \
+      g++ \
+      git \
+      wget \
+      curl \
+      yarn \
+      docker \
+      freetds-dev \
+      inotify-tools && \
+    rm -rf /var/cache/apk/*
+
+ENV MIX_ENV dev
+ENV NODE_ENV development
+
+# Ensure latest versions of Hex/Rebar are installed on build
+# And install the phx_new generator
+RUN mix do local.hex --force, local.rebar --force && \
+    mix archive.install --force hex phx_new 1.5.9
+
+RUN mkdir /app
+WORKDIR /app
