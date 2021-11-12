@@ -7,13 +7,13 @@ defmodule Exercises.DNA do
   @doc """
     Non-recursive option to encode a DNA string into a bitstring.
 
-    CAN ONLY BE USED WITH `&decode/1`.
+    CAN ONLY BE USED WITH `&decode_non_recursive/1`.
 
     ## Example:
-    iex >> Exercises.DNA.encode("AGTC AG T")
+    iex >> Exercises.DNA.encode_non_recursive("AGTC AG T")
     <<1, 4, 8, 2, 0, 1, 4, 0, 8>>
   """
-  def encode(nas) do
+  def encode_non_recursive(nas) do
     nas
     |> to_charlist()
     |> Enum.map(&encode_nucleotide/1)
@@ -23,13 +23,13 @@ defmodule Exercises.DNA do
   @doc """
     Non-recursive option to decode a bitstring into a DNA string.
 
-    CAN ONLY BE USED WITH `&encode/1`.
+    CAN ONLY BE USED WITH `&encode_non_recursive/1`.
 
     ## Example:
-    iex >> Exercises.DNA.decode(<<1, 4, 8, 2, 0, 1, 4, 0, 8>>)
+    iex >> Exercises.DNA.decode_non_recursive(<<1, 4, 8, 2, 0, 1, 4, 0, 8>>)
     "AGTC AG T"
   """
-  def decode(bitstring) do
+  def decode_non_recursive(bitstring) do
     bitstring
     |> :binary.bin_to_list()
     |> Enum.map(&decode_nucleotide/1)
@@ -45,10 +45,10 @@ defmodule Exercises.DNA do
     CAN ONLY BE USED WITH `&decode_rec/1`.
 
     ## Example:
-    iex >> Exercises.DNA.encode_rec("AGTC AG T")
+    iex >> Exercises.DNA.encode("AGTC AG T")
     <<20, 130, 1, 64, 8::size(4)>>
   """
-  def encode_rec(nas) do
+  def encode(nas) do
     nas
     |> to_charlist()
     |> Enum.reduce(<<>>, fn na, acc -> 
@@ -59,13 +59,13 @@ defmodule Exercises.DNA do
   @doc """
     Recursive option to decode a bitstring into a DNA string.
 
-    CAN ONLY BE USED WITH `&encode_rec/1`.
+    CAN ONLY BE USED WITH `&encode/1`.
 
     ## Example:
-    iex >> Exercises.DNA.decode_rec(<<20, 130, 1, 64, 8::size(4)>>)
+    iex >> Exercises.DNA.decode(<<20, 130, 1, 64, 8::size(4)>>)
     'AGTC AG T'
   """
-  def decode_rec(bitstring) do
+  def decode(bitstring) do
     []
     |> decode_helper(bitstring)
     |> Enum.reverse()
@@ -79,15 +79,15 @@ defmodule Exercises.DNA do
   end
   
   # Helper functions that use pattern matching to encode or decode inputs.
-  defp encode_nucleotide(?\s), do:  0b0000
-  defp encode_nucleotide(?A), do: 0b0001
-  defp encode_nucleotide(?C), do: 0b0010
-  defp encode_nucleotide(?G), do: 0b0100
-  defp encode_nucleotide(?T), do: 0b1000
+  def encode_nucleotide(?\s), do:  0b0000
+  def encode_nucleotide(?A), do: 0b0001
+  def encode_nucleotide(?C), do: 0b0010
+  def encode_nucleotide(?G), do: 0b0100
+  def encode_nucleotide(?T), do: 0b1000
 
-  defp decode_nucleotide(0b0000), do: ?\s
-  defp decode_nucleotide(0b0001), do: ?A
-  defp decode_nucleotide(0b0010), do: ?C
-  defp decode_nucleotide(0b0100), do: ?G
-  defp decode_nucleotide(0b1000), do: ?T
+  def decode_nucleotide(0b0000), do: ?\s
+  def decode_nucleotide(0b0001), do: ?A
+  def decode_nucleotide(0b0010), do: ?C
+  def decode_nucleotide(0b0100), do: ?G
+  def decode_nucleotide(0b1000), do: ?T
 end
